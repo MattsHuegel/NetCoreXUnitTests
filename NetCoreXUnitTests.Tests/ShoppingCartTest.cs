@@ -19,12 +19,13 @@ namespace NetCoreXUnitTests.Tests
         }
 
         [Theory]
-        [InlineData(2, 4, 8)]
-        [InlineData(2, 4, 9)]
+        [InlineData(2, 4, 8, true)]
+        [InlineData(2, 4, 9, false)]
         public void TestMethodAddItems(
             int quantity,
             decimal amount,
-            decimal totalExpected
+            decimal totalExpected,
+            bool valid
         )
         {
             var shoppingCart = new ShoppingCart();
@@ -34,7 +35,18 @@ namespace NetCoreXUnitTests.Tests
                 amount: amount
             );
 
-            Assert.True(total == totalExpected);
+            Assert.True(valid == (total == totalExpected));
+        }
+
+        [Theory]
+        [InlineData("", false)]
+        [InlineData("123", true)]
+        [InlineData("   asdasd", false)]
+        [InlineData("asdasd   ", false)]
+        [InlineData("asd   asd", false)]
+        public void TestCode(string code, bool valid)
+        {
+            Assert.True(valid == !string.IsNullOrWhiteSpace(code));
         }
     }
 }
